@@ -11,7 +11,7 @@ describe('DeleteAllTransactionsUseCase', () => {
   });
 
   it('should delete all transactions', async () => {
-    await repository.create({ amount: 10, timestamps: new Date() });
+    await repository.create({ amount: 10, timestamp: new Date() });
 
     const deleteSpy = jest.spyOn(repository, 'deleteAll');
 

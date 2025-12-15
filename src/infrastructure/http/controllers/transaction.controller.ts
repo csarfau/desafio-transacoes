@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Post,
   UnprocessableEntityException,
@@ -11,16 +12,19 @@ import { CreateTransactionUseCase } from 'src/application/use-cases/create-trans
 import { CreateTransactionBodyDto } from '../dtos/create-transaction-body.dto';
 import { InvalidTransactionError } from 'src/domain/errors/invalid-transaction.error';
 import { DeleteAllTransactionsUseCase } from 'src/application/use-cases/delete-all-transactions.use-case';
+import { GetStatisticsUseCase } from 'src/application/use-cases/get-statistics.use-case';
+import { StatisticsDto } from 'src/application/dtos/statistics.dto';
 
 @ApiTags('transactions')
-@Controller('transactions')
+@Controller()
 export class TransactionController {
   constructor(
     private readonly createTransactionUseCase: CreateTransactionUseCase,
     private readonly deleteAllTransactionsUseCase: DeleteAllTransactionsUseCase,
+    private readonly getStatisticsUseCase: GetStatisticsUseCase,
   ) {}
 
-  @Post()
+  @Post('transactions')
   @HttpCode(201)
   @ApiOperation({ summary: 'Cria uma nova transação' })
   @ApiResponse({ status: 201, description: 'Transação criada com sucesso.' })
@@ -41,14 +45,28 @@ export class TransactionController {
     }
   }
 
-  @Delete()
+  @Delete('transactions')
   @HttpCode(200)
-  @ApiOperation({ summary: 'Delete all transactions' })
+  @ApiOperation({ summary: 'Deleta todas as transações.' })
   @ApiResponse({
     status: 200,
-    description: 'All transactions deleted successfully.',
+    description: 'Todas as transações deletadas com sucesso.',
   })
   async deleteAll(): Promise<void> {
     await this.deleteAllTransactionsUseCase.execute();
+  }
+
+  @Get('statistics')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Retorna estatísticas das transações (últimos 60s).',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Estatísticas retornadas com sucesso.',
+    type: StatisticsDto,
+  })
+  async getStatistics(): Promise<StatisticsDto> {
+    return this.getStatisticsUseCase.execute();
   }
 }

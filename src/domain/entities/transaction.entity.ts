@@ -1,10 +1,10 @@
 export class Transaction {
   readonly amount: number;
-  readonly timestamps: Date;
+  readonly timestamp: Date;
 
-  constructor(amount: number, timestamps: Date | string) {
+  constructor(amount: number, timestamp: Date | string) {
     this.amount = amount;
-    this.timestamps =
-      typeof timestamps === 'string' ? new Date(timestamps) : timestamps;
+    this.timestamp =
+      typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
   }
 }
