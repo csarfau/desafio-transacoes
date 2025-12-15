@@ -3,6 +3,7 @@ import { TransactionRepository } from './domain/repositories/transaction.reposit
 import { MemoryTransactionRepository } from './infrastructure/database/memory-transaction.repository';
 import { CreateTransactionUseCase } from './application/use-cases/create-transaction.use-case';
 import { TransactionController } from './infrastructure/http/controllers/transaction.controller';
+import { DeleteAllTransactionsUseCase } from './application/use-cases/delete-all-transactions.use-case';
 
 @Module({
   imports: [],
@@ -13,6 +14,7 @@ import { TransactionController } from './infrastructure/http/controllers/transac
       useClass: MemoryTransactionRepository,
     },
     CreateTransactionUseCase,
+    DeleteAllTransactionsUseCase,
   ],
 })
 export class AppModule {}
