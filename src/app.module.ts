@@ -5,10 +5,11 @@ import { CreateTransactionUseCase } from './application/use-cases/create-transac
 import { TransactionController } from './infrastructure/http/controllers/transaction.controller';
 import { DeleteAllTransactionsUseCase } from './application/use-cases/delete-all-transactions.use-case';
 import { GetStatisticsUseCase } from './application/use-cases/get-statistics.use-case';
+import { HealthController } from './infrastructure/http/controllers/health.controller';
 
 @Module({
   imports: [],
-  controllers: [TransactionController],
+  controllers: [TransactionController, HealthController],
   providers: [
     {
       provide: TransactionRepository,
