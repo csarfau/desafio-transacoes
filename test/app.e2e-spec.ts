@@ -3,6 +3,8 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
+import { HttpAdapterHost } from '@nestjs/core';
+import { AllExceptionsFilter } from '../src/infrastructure/http/filters/all-exceptions.filter';
 
 describe('Transaction API (e2e)', () => {
   let app: INestApplication<App>;
@@ -21,6 +23,9 @@ describe('Transaction API (e2e)', () => {
         transform: true,
       }),
     );
+
+    const httpAdapter = app.get(HttpAdapterHost);
+    app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
     await app.init();
   });
