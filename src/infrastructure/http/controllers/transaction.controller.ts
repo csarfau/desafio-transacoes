@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Logger,
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { StatisticsDto } from '../../../application/dtos/statistics.dto';
 @ApiTags('transactions')
 @Controller()
 export class TransactionController {
+  private readonly logger = new Logger(TransactionController.name);
   constructor(
     private readonly createTransactionUseCase: CreateTransactionUseCase,
     private readonly deleteAllTransactionsUseCase: DeleteAllTransactionsUseCase,
@@ -35,14 +37,9 @@ export class TransactionController {
       'Regra de negócio violada (data de transação futura ou valor menor que zero).',
   })
   async create(@Body() body: CreateTransactionBodyDto) {
-    try {
-      await this.createTransactionUseCase.execute(body);
-    } catch (error) {
-      if (error instanceof InvalidTransactionError) {
-        throw new UnprocessableEntityException(error.message);
-      }
-      throw error;
-    }
+    this.logger.log(`Receiving transaction request: ${JSON.stringify(body)}`);
+    await this.createTransactionUseCase.execute(body);
+    this.logger.log('Transaction processed successfully');
   }
 
   @Delete('transactions')
@@ -53,7 +50,11 @@ export class TransactionController {
     description: 'Todas as transações deletadas com sucesso.',
   })
   async deleteAll(): Promise<void> {
+    this.logger.log('Delete all transactions request received.');
+
     await this.deleteAllTransactionsUseCase.execute();
+
+    this.logger.log('All transactions deleted.');
   }
 
   @Get('statistics')
@@ -67,6 +68,7 @@ export class TransactionController {
     type: StatisticsDto,
   })
   async getStatistics(): Promise<StatisticsDto> {
+    this.logger.log('Get statistics request received.');
     return this.getStatisticsUseCase.execute();
   }
 }
