@@ -8,12 +8,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTransactionUseCase } from 'src/application/use-cases/create-transaction.use-case';
+import { CreateTransactionUseCase } from '../../../application/use-cases/create-transaction.use-case';
 import { CreateTransactionBodyDto } from '../dtos/create-transaction-body.dto';
-import { InvalidTransactionError } from 'src/domain/errors/invalid-transaction.error';
-import { DeleteAllTransactionsUseCase } from 'src/application/use-cases/delete-all-transactions.use-case';
-import { GetStatisticsUseCase } from 'src/application/use-cases/get-statistics.use-case';
-import { StatisticsDto } from 'src/application/dtos/statistics.dto';
+import { InvalidTransactionError } from '../../../domain/errors/invalid-transaction.error';
+import { DeleteAllTransactionsUseCase } from '../../../application/use-cases/delete-all-transactions.use-case';
+import { GetStatisticsUseCase } from '../../../application/use-cases/get-statistics.use-case';
+import { StatisticsDto } from '../../../application/dtos/statistics.dto';
 
 @ApiTags('transactions')
 @Controller()
