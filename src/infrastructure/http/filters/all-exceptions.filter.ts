@@ -19,7 +19,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
-    let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    let httpStatus: number = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | object = 'Internal server error';
 
     if (exception instanceof HttpException) {
@@ -33,19 +33,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
-      path: httpAdapter.getRequestUrl(ctx.getRequest()),
+      path: httpAdapter.getRequestUrl(ctx.getRequest()) as string,
       error: message,
     };
 
+    const path = responseBody.path;
+
     if (httpStatus >= 500) {
       this.logger.error(
-        `Critical Error on ${responseBody.path}`,
+        `Critical Error on ${path}`,
         exception instanceof Error ? exception.stack : '',
       );
     } else {
-      this.logger.warn(
-        `Client Error on ${responseBody.path}: ${JSON.stringify(message)}`,
-      );
+      this.logger.warn(`Client Error on ${path}: ${JSON.stringify(message)}`);
     }
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

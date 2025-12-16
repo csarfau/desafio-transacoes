@@ -6,12 +6,10 @@ import {
   HttpCode,
   Logger,
   Post,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateTransactionUseCase } from '../../../application/use-cases/create-transaction.use-case';
 import { CreateTransactionBodyDto } from '../dtos/create-transaction-body.dto';
-import { InvalidTransactionError } from '../../../domain/errors/invalid-transaction.error';
 import { DeleteAllTransactionsUseCase } from '../../../application/use-cases/delete-all-transactions.use-case';
 import { GetStatisticsUseCase } from '../../../application/use-cases/get-statistics.use-case';
 import { StatisticsDto } from '../../../application/dtos/statistics.dto';
