@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TransactionRepository } from './domain/repositories/transaction.repository';
 import { MemoryTransactionRepository } from './infrastructure/database/memory-transaction.repository';
 import { CreateTransactionUseCase } from './application/use-cases/create-transaction.use-case';
@@ -8,6 +13,7 @@ import { GetStatisticsUseCase } from './application/use-cases/get-statistics.use
 import { HealthController } from './infrastructure/http/controllers/health.controller';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { JsonContentTypeMiddleware } from './infrastructure/http/middlewares/json-content-type.middleware';
 
 @Module({
   imports: [
@@ -33,4 +39,10 @@ import { APP_GUARD } from '@nestjs/core';
     GetStatisticsUseCase,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(JsonContentTypeMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

@@ -57,6 +57,14 @@ describe('Transaction API (e2e)', () => {
       .expect(422);
   });
 
+  it('/transactions (POST) - should reject non-JSON content type (415)', () => {
+    return request(app.getHttpServer())
+      .post('/transactions')
+      .set('Content-Type', 'text/plain')
+      .send('amount=10&timestamp=2024-01-01')
+      .expect(400);
+  });
+
   it('/statistics (GET) - should return stats', async () => {
     await request(app.getHttpServer()).delete('/transactions').expect(200);
 
