@@ -1,5 +1,6 @@
 # Desafio Técnico - API de Transações
 
+![CI Pipeline](https://github.com/csarfau/desafio-transacoes/actions/workflows/ci.yml/badge.svg)
 API RESTful para recebimento de transações e cálculo de estatísticas em tempo real. Desenvolvida com **NestJS** seguindo os princípios de **Clean Architecture** e **SOLID**.
 
 ---

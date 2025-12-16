@@ -1,0 +1,54 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  quality-check:
+    name: Quality Check (Lint & Tests)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Instalar Dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Rodar Linter
+        run: pnpm run lint
+
+      - name: Rodar Build (TypeScript Check)
+        run: pnpm run build
+
+      - name: Rodar Testes Unitários
+        run: pnpm test
+
+      - name: Rodar Testes E2E
+        run: pnpm run test:e2e
+
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    needs: quality-check
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Build da Imagem Docker
+        run: docker build -t transaction-api:latest .
